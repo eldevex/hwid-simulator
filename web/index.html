@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор VPN-подписки без hwid</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            display: none;
+        }
+        #proxyLinkInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        #copyButton {
+            width: auto;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin: 0;
+        }
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Генератор VPN-подписки</h1>
+        <form id="subscriptionForm">
+            <div class="form-group">
+                <label for="subscriptionUrl">Ссылка на подписку:</label>
+                <input type="text" id="subscriptionUrl" placeholder="https://s.waicore.com/..." required>
+            </div>
+            <button type="submit">Получить прокси</button>
+            <div id="error" class="error"></div>
+        </form>
+        <div id="result">
+            <p>Ваша новая ссылка для получения прокси:</p>
+            <input type="text" id="proxyLinkInput" readonly>
+            <button id="copyButton" type="button">Копировать</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('subscriptionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const subscriptionUrl = document.getElementById('subscriptionUrl').value.trim();
+            const errorElement = document.getElementById('error');
+            const resultElement = document.getElementById('result');
+            const proxyLinkInput = document.getElementById('proxyLinkInput');
+
+            errorElement.textContent = '';
+            resultElement.style.display = 'none';
+
+            if (!subscriptionUrl) {
+                errorElement.textContent = 'Пожалуйста, введите ссылку на подписку.';
+                return;
+            }
+
+            // Кодируем URL для передачи в GET-параметре
+            const encodedUrl = encodeURIComponent(subscriptionUrl);
+            const proxyUrl = `https://bobr-hwid.alwaysdata.net/proxy.php?url=${encodedUrl}`;
+
+            proxyLinkInput.value = proxyUrl;
+            resultElement.style.display = 'block';
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const proxyLinkInput = document.getElementById('proxyLinkInput');
+            proxyLinkInput.select();
+            document.execCommand('copy');
+            alert('Ссылка скопирована!');
+        });
+    </script>
+</body>
+</html>
