@@ -61,6 +61,15 @@ if (strpos($output, 'Limit of devices reached') !== false) {
 }
 
 /**
+ * REMOVE LINES STARTING WITH #
+ */
+$lines = explode("\n", $output);
+$filtered_lines = array_filter($lines, function($line) {
+    return !empty($line) && strpos(trim($line), '#') !== 0;
+});
+$output = implode("\n", $filtered_lines);
+
+/**
  * OUTPUT RAW CONFIGURATION
  */
 header("Content-Type: text/plain; charset=utf-8");
